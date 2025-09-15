@@ -375,8 +375,6 @@ helm template test ./helm/microservice-chart --values values-dev.yaml
 
 ## 🔮 Future Enhancements
 
-### With More Time, I Would Add:
-
 1. **Multi-Region Support**:
    - Cross-region database replication
    - Global load balancing with Route 53
