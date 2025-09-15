@@ -1,0 +1,7 @@
+# Example Terraform variables for prerequisites
+# Copy this to terraform.tfvars and customize
+
+aws_region         = "us-west-2"
+cluster_name       = "dev-cluster"
+vpc_cidr          = "10.0.0.0/16"
+kubernetes_version = "1.28"

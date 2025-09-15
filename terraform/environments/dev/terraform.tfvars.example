@@ -1,0 +1,23 @@
+# Example Terraform variables file
+# Copy this to terraform.tfvars and customize for your environment
+
+service_name = "example-service"
+cluster_name = "dev-eks-cluster"
+oidc_provider_arn = "arn:aws:iam::123456789012:oidc-provider/oidc.eks.us-west-2.amazonaws.com/id/EXAMPLED539D4633E53DE1B716D3041E"
+
+# Optional: Customize VPC (if not using default lookup)
+# vpc_name = "custom-vpc"
+
+# Database configuration
+enable_rds = true
+use_aurora = false
+db_instance_class = "db.t3.micro"
+db_allocated_storage = 20
+
+# Cache configuration
+enable_cache = true
+cache_node_type = "cache.t3.micro"
+cache_num_nodes = 1
+
+# Message queue configuration
+enable_sqs = true

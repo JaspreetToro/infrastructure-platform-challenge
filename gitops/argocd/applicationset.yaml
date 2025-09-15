@@ -1,0 +1,68 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: microservice-platform
+  namespace: argocd
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          environment: dev
+      values:
+        environment: dev
+        revision: HEAD
+  - clusters:
+      selector:
+        matchLabels:
+          environment: staging
+      values:
+        environment: staging
+        revision: HEAD
+  - clusters:
+      selector:
+        matchLabels:
+          environment: prod
+      values:
+        environment: main
+        revision: HEAD
+  template:
+    metadata:
+      name: '{{name}}-{{values.environment}}'
+      labels:
+        environment: '{{values.environment}}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/your-org/infrastructure-platform-challenge
+        targetRevision: '{{values.revision}}'
+        path: helm/microservice-chart
+        helm:
+          valueFiles:
+          - values.yaml
+          - values-{{values.environment}}.yaml
+          parameters:
+          - name: cluster.name
+            value: '{{name}}'
+          - name: cluster.environment
+            value: '{{values.environment}}'
+          - name: environment
+            value: '{{values.environment}}'
+      destination:
+        server: '{{server}}'
+        namespace: '{{metadata.labels.service-name | default "default"}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+        - CreateNamespace=true
+        - PrunePropagationPolicy=foreground
+        - PruneLast=true
+        retry:
+          limit: 5
+          backoff:
+            duration: 5s
+            factor: 2
+            maxDuration: 3m
+      revisionHistoryLimit: 10

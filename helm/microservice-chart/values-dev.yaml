@@ -1,0 +1,47 @@
+environment: dev
+
+replicaCount: 1
+
+image:
+  tag: "dev-latest"
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi
+
+autoscaling:
+  enabled: false
+
+database:
+  enabled: true
+  host: "microservice-dev.cluster-xyz.us-west-2.rds.amazonaws.com"
+  passwordSecret:
+    name: "microservice-dev-db-password"
+    key: "password"
+
+cache:
+  enabled: true
+  host: "microservice-dev.abc123.cache.amazonaws.com"
+
+messageQueue:
+  enabled: true
+  queueUrl: "https://sqs.us-west-2.amazonaws.com/123456789/microservice-dev-queue"
+
+ingress:
+  annotations:
+    alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:us-west-2:123456789:certificate/dev-cert"
+  hosts:
+    - host: "dev-api.company.com"
+      paths:
+        - path: /microservice
+          pathType: Prefix
+
+monitoring:
+  enabled: false
+
+podDisruptionBudget:
+  enabled: false
